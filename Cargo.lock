@@ -108,7 +108,7 @@ dependencies = [
  "integer-sqrt",
  "orml-asset-registry",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "orml-xcm",
  "orml-xcm-support",
  "orml-xtokens",
@@ -1033,7 +1033,7 @@ dependencies = [
  "integer-sqrt",
  "orml-asset-registry",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "orml-xcm",
  "orml-xcm-support",
  "orml-xtokens",
@@ -1185,7 +1185,7 @@ dependencies = [
  "lazy_static",
  "mockall",
  "orml-asset-registry",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "parity-scale-codec 3.2.1",
  "scale-info",
  "serde",
@@ -1204,7 +1204,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "orml-asset-registry",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "parity-scale-codec 3.2.1",
  "polkadot-parachain",
  "rev_slice",
@@ -2288,7 +2288,7 @@ dependencies = [
  "integer-sqrt",
  "orml-asset-registry",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "orml-xcm",
  "orml-xcm-support",
  "orml-xtokens",
@@ -3271,7 +3271,7 @@ dependencies = [
  "sp-state-machine",
  "sp-std",
  "sp-tracing",
- "sp-weights",
+ "sp-weights 4.0.0 (git+https://github.com/paritytech//substrate?rev=5ea6d95309aaccfa399c5f72e5a14a4b7c6c4ca1)",
  "tt-call",
 ]
 
@@ -3326,7 +3326,7 @@ dependencies = [
  "sp-runtime",
  "sp-std",
  "sp-version",
- "sp-weights",
+ "sp-weights 4.0.0 (git+https://github.com/paritytech//substrate?rev=5ea6d95309aaccfa399c5f72e5a14a4b7c6c4ca1)",
 ]
 
 [[package]]
@@ -4484,7 +4484,7 @@ dependencies = [
  "smallvec",
  "sp-core",
  "sp-runtime",
- "sp-weights",
+ "sp-weights 4.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-v0.9.32)",
 ]
 
 [[package]]
@@ -5742,7 +5742,7 @@ source = "git+https://github.com/open-web3-stack/open-runtime-module-library?bra
 dependencies = [
  "frame-support",
  "frame-system",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "pallet-xcm",
  "parity-scale-codec 3.2.1",
  "scale-info",
@@ -5761,7 +5761,7 @@ source = "git+https://github.com/open-web3-stack/open-runtime-module-library?bra
 dependencies = [
  "frame-support",
  "frame-system",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "parity-scale-codec 3.2.1",
  "scale-info",
  "serde",
@@ -5777,7 +5777,25 @@ dependencies = [
  "frame-support",
  "impl-trait-for-tuples",
  "num-traits",
- "orml-utilities",
+ "orml-utilities 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
+ "parity-scale-codec 3.2.1",
+ "scale-info",
+ "serde",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+ "xcm",
+]
+
+[[package]]
+name = "orml-traits"
+version = "0.4.1-dev"
+source = "git+https://github.com/open-web3-stack/open-runtime-module-library?rev=f336875e48599b5e9500b301385259354821f01f#f336875e48599b5e9500b301385259354821f01f"
+dependencies = [
+ "frame-support",
+ "impl-trait-for-tuples",
+ "num-traits",
+ "orml-utilities 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?rev=f336875e48599b5e9500b301385259354821f01f)",
  "parity-scale-codec 3.2.1",
  "scale-info",
  "serde",
@@ -5791,6 +5809,20 @@ dependencies = [
 name = "orml-utilities"
 version = "0.4.1-dev"
 source = "git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32#f336875e48599b5e9500b301385259354821f01f"
+dependencies = [
+ "frame-support",
+ "parity-scale-codec 3.2.1",
+ "scale-info",
+ "serde",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "orml-utilities"
+version = "0.4.1-dev"
+source = "git+https://github.com/open-web3-stack/open-runtime-module-library?rev=f336875e48599b5e9500b301385259354821f01f#f336875e48599b5e9500b301385259354821f01f"
 dependencies = [
  "frame-support",
  "parity-scale-codec 3.2.1",
@@ -5821,7 +5853,7 @@ version = "0.4.1-dev"
 source = "git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32#f336875e48599b5e9500b301385259354821f01f"
 dependencies = [
  "frame-support",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "parity-scale-codec 3.2.1",
  "sp-runtime",
  "sp-std",
@@ -5837,7 +5869,7 @@ dependencies = [
  "cumulus-primitives-core",
  "frame-support",
  "frame-system",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "orml-xcm-support",
  "pallet-xcm",
  "parity-scale-codec 3.2.1",
@@ -6186,7 +6218,7 @@ dependencies = [
  "frame-system",
  "hex",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "pallet-balances",
  "pallet-ethereum",
  "pallet-ethereum-xcm",
@@ -6587,7 +6619,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "pallet-balances",
  "pallet-restricted-tokens",
  "parity-scale-codec 3.2.1",
@@ -6649,7 +6681,7 @@ dependencies = [
  "frame-system",
  "orml-asset-registry",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "pallet-balances",
  "pallet-interest-accrual",
  "pallet-permissions",
@@ -6791,7 +6823,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "pallet-balances",
  "pallet-uniques",
  "parity-scale-codec 3.2.1",
@@ -6917,7 +6949,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "orml-asset-registry",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "pallet-permissions",
  "pallet-pool-system",
  "pallet-timestamp",
@@ -6947,7 +6979,7 @@ dependencies = [
  "lazy_static",
  "orml-asset-registry",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "pallet-balances",
  "pallet-investments",
  "pallet-permissions",
@@ -7076,7 +7108,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "pallet-balances",
  "pallet-permissions",
  "parity-scale-codec 3.2.1",
@@ -7097,7 +7129,7 @@ dependencies = [
  "lazy_static",
  "num-traits",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "parity-scale-codec 3.2.1",
  "scale-info",
  "serde",
@@ -7297,7 +7329,7 @@ dependencies = [
  "sp-core",
  "sp-rpc",
  "sp-runtime",
- "sp-weights",
+ "sp-weights 4.0.0 (git+https://github.com/paritytech//substrate?rev=5ea6d95309aaccfa399c5f72e5a14a4b7c6c4ca1)",
 ]
 
 [[package]]
@@ -7309,7 +7341,7 @@ dependencies = [
  "parity-scale-codec 3.2.1",
  "sp-api",
  "sp-runtime",
- "sp-weights",
+ "sp-weights 4.0.0 (git+https://github.com/paritytech//substrate?rev=5ea6d95309aaccfa399c5f72e5a14a4b7c6c4ca1)",
 ]
 
 [[package]]
@@ -7435,7 +7467,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "log",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?rev=f336875e48599b5e9500b301385259354821f01f)",
  "parity-scale-codec 3.2.1",
  "scale-info",
  "serde",
@@ -8718,7 +8750,7 @@ dependencies = [
  "smallvec",
  "sp-core",
  "sp-runtime",
- "sp-weights",
+ "sp-weights 4.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-v0.9.32)",
 ]
 
 [[package]]
@@ -9655,7 +9687,7 @@ dependencies = [
  "smallvec",
  "sp-core",
  "sp-runtime",
- "sp-weights",
+ "sp-weights 4.0.0 (git+https://github.com/paritytech/substrate?branch=polkadot-v0.9.32)",
 ]
 
 [[package]]
@@ -9704,7 +9736,7 @@ dependencies = [
  "frame-support",
  "frame-system",
  "node-primitives",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "pallet-anchors",
  "pallet-authorship",
  "pallet-balances",
@@ -9750,7 +9782,7 @@ dependencies = [
  "node-primitives",
  "orml-asset-registry",
  "orml-tokens",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?branch=polkadot-v0.9.32)",
  "orml-xcm-support",
  "orml-xtokens",
  "pallet-asset-tx-payment",
@@ -11983,7 +12015,7 @@ dependencies = [
  "sp-core",
  "sp-io",
  "sp-std",
- "sp-weights",
+ "sp-weights 4.0.0 (git+https://github.com/paritytech//substrate?rev=5ea6d95309aaccfa399c5f72e5a14a4b7c6c4ca1)",
 ]
 
 [[package]]
@@ -12223,6 +12255,22 @@ dependencies = [
  "sp-std",
  "wasmi",
  "wasmtime",
+]
+
+[[package]]
+name = "sp-weights"
+version = "4.0.0"
+source = "git+https://github.com/paritytech//substrate?rev=5ea6d95309aaccfa399c5f72e5a14a4b7c6c4ca1#5ea6d95309aaccfa399c5f72e5a14a4b7c6c4ca1"
+dependencies = [
+ "impl-trait-for-tuples",
+ "parity-scale-codec 3.2.1",
+ "scale-info",
+ "serde",
+ "smallvec",
+ "sp-arithmetic",
+ "sp-core",
+ "sp-debug-derive",
+ "sp-std",
 ]
 
 [[package]]
@@ -13088,7 +13136,7 @@ dependencies = [
  "sp-runtime",
  "sp-state-machine",
  "sp-version",
- "sp-weights",
+ "sp-weights 4.0.0 (git+https://github.com/paritytech//substrate?rev=5ea6d95309aaccfa399c5f72e5a14a4b7c6c4ca1)",
  "substrate-rpc-client",
  "zstd",
 ]
@@ -13980,7 +14028,7 @@ dependencies = [
  "frame-system",
  "hex",
  "log",
- "orml-traits",
+ "orml-traits 0.4.1-dev (git+https://github.com/open-web3-stack/open-runtime-module-library?rev=f336875e48599b5e9500b301385259354821f01f)",
  "parity-scale-codec 3.2.1",
  "scale-info",
  "serde",
@@ -14067,3 +14115,23 @@ dependencies = [
  "cc",
  "libc",
 ]
+
+[[patch.unused]]
+name = "orml-asset-registry"
+version = "0.4.1-dev"
+source = "git+https://github.com/open-web3-stack/open-runtime-module-library?rev=f336875e48599b5e9500b301385259354821f01f#f336875e48599b5e9500b301385259354821f01f"
+
+[[patch.unused]]
+name = "orml-tokens"
+version = "0.4.1-dev"
+source = "git+https://github.com/open-web3-stack/open-runtime-module-library?rev=f336875e48599b5e9500b301385259354821f01f#f336875e48599b5e9500b301385259354821f01f"
+
+[[patch.unused]]
+name = "orml-xcm-support"
+version = "0.4.1-dev"
+source = "git+https://github.com/open-web3-stack/open-runtime-module-library?rev=f336875e48599b5e9500b301385259354821f01f#f336875e48599b5e9500b301385259354821f01f"
+
+[[patch.unused]]
+name = "orml-xtokens"
+version = "0.4.1-dev"
+source = "git+https://github.com/open-web3-stack/open-runtime-module-library?rev=f336875e48599b5e9500b301385259354821f01f#f336875e48599b5e9500b301385259354821f01f"
