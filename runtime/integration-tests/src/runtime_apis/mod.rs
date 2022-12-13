@@ -26,9 +26,13 @@ use sc_executor::WasmExecutor;
 use sc_service::TFullClient;
 use sp_api::ProvideRuntimeApi as _;
 use sp_consensus_slots::SlotDuration;
-use sp_core::{sr25519, H256};
+use sp_core::{
+	sr25519,
+	sr25519::{Pair, Public},
+	Pair as TraitPair, H256,
+};
 use sp_inherents::CreateInherentDataProviders;
-use sp_runtime::{generic::BlockId, BuildStorage, Storage};
+use sp_runtime::{generic::BlockId, traits::IdentifyAccount, BuildStorage, Storage};
 use tokio::runtime::Handle;
 use xcm_emulator::ParachainInherentData;
 
@@ -77,23 +81,16 @@ fn create_builder(
 	);
 
 	state.insert_storage(
-		pallet_rewards::GenesisConfig::<centrifuge::Runtime, pallet_rewards::Instance1> {
-			currencies: vec![(
-				(
-					development_runtime::RewardDomain::Block,
-					development_runtime::CurrencyId::Native,
+		pallet_balances::GenesisConfig::<centrifuge::Runtime> {
+			balances: vec![(
+				sp_runtime::AccountId32::from(
+					<sr25519::Pair as sp_core::Pair>::from_string("//Alice", None)
+						.unwrap()
+						.public()
+						.into_account(),
 				),
-				1,
+				10000 * CFG,
 			)],
-			stake_accounts: vec![(
-				get_account_id_from_seed::<sr25519::Public>("Alice"),
-				(
-					development_runtime::RewardDomain::Block,
-					development_runtime::CurrencyId::Native,
-				),
-				100 * CFG,
-			)],
-			rewards: vec![(1, 200 * CFG)],
 		}
 		.build_storage()
 		.expect("ESSENTIAL: GenesisBuild must not fail at this stage."),
@@ -186,7 +183,7 @@ impl ApiEnv {
 		let api = client.runtime_api();
 		let best_hash = BlockId::hash(self.builder.client().info().best_hash);
 
-		self.builder.with_state(exec(api, best_hash)).unwrap();
+		exec(api, best_hash);
 
 		self
 	}
