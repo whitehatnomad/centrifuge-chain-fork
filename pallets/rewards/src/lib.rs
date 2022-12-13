@@ -65,7 +65,7 @@ mod tests;
 
 pub mod mechanism;
 
-use cfg_traits::rewards::{AccountRewards, CurrencyGroupChange, GroupRewards};
+use cfg_traits::rewards::{AccountRewards, CurrencyGroupChange, DistributedRewards, GroupRewards};
 use codec::FullCodec;
 use frame_support::{
 	pallet_prelude::*,
@@ -78,6 +78,7 @@ use frame_support::{
 use mechanism::{DistributionId, MoveCurrencyError, RewardMechanism};
 pub use pallet::*;
 use sp_runtime::{traits::AccountIdConversion, TokenError};
+use sp_std::fmt::Debug;
 
 type RewardCurrencyOf<T, I> = <<T as Config<I>>::RewardMechanism as RewardMechanism>::Currency;
 type RewardGroupOf<T, I> = <<T as Config<I>>::RewardMechanism as RewardMechanism>::Group;
@@ -101,16 +102,28 @@ pub mod pallet {
 		type PalletId: Get<PalletId>;
 
 		/// Type used to identify domains.
-		type DomainId: TypeInfo + MaxEncodedLen + FullCodec + Copy + PartialEq + sp_std::fmt::Debug;
+		type DomainId: TypeInfo
+			+ MaxEncodedLen
+			+ FullCodec
+			+ Copy
+			+ PartialEq
+			+ Debug
+			+ MaybeSerializeDeserialize;
 
 		/// Type used to identify currencies.
-		type CurrencyId: AssetId + MaxEncodedLen;
+		type CurrencyId: AssetId + MaxEncodedLen + MaybeSerializeDeserialize;
 
 		/// Identifier for the currency used to give the reward.
 		type RewardCurrency: Get<Self::CurrencyId>;
 
 		/// Type used to identify groups.
-		type GroupId: FullCodec + TypeInfo + MaxEncodedLen + Copy + PartialEq + sp_std::fmt::Debug;
+		type GroupId: FullCodec
+			+ TypeInfo
+			+ MaxEncodedLen
+			+ Copy
+			+ PartialEq
+			+ Debug
+			+ MaybeSerializeDeserialize;
 
 		/// Type used to handle currency transfers and reservations.
 		type Currency: MutateHold<Self::AccountId, AssetId = Self::CurrencyId, Balance = BalanceOf<Self, I>>
@@ -439,6 +452,60 @@ pub mod pallet {
 			StakeAccounts::<T, I>::iter_prefix(account_id)
 				.map(|(currency_id, _)| currency_id)
 				.collect()
+		}
+	}
+
+	#[pallet::genesis_config]
+	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
+		pub currencies: Vec<((T::DomainId, T::CurrencyId), T::GroupId)>,
+		pub stake_accounts: Vec<(T::AccountId, (T::DomainId, T::CurrencyId), BalanceOf<T, I>)>,
+		pub rewards: Vec<(T::GroupId, BalanceOf<T, I>)>,
+	}
+
+	#[cfg(feature = "std")]
+	impl<T: Config<I>, I: 'static> Default for GenesisConfig<T, I> {
+		fn default() -> Self {
+			Self {
+				currencies: Default::default(),
+				stake_accounts: Default::default(),
+				rewards: Default::default(),
+			}
+		}
+	}
+
+	#[pallet::genesis_build]
+	impl<T: Config<I>, I: 'static> GenesisBuild<T, I> for GenesisConfig<T, I>
+	where
+		BalanceOf<T, I>: sp_runtime::FixedPointOperand + sp_runtime::traits::Zero,
+		Pallet<T, I>: AccountRewards<
+				T::AccountId,
+				CurrencyId = (T::DomainId, T::CurrencyId),
+				Balance = BalanceOf<T, I>,
+			> + CurrencyGroupChange<CurrencyId = (T::DomainId, T::CurrencyId), GroupId = T::GroupId>
+			+ DistributedRewards<Balance = BalanceOf<T, I>, GroupId = T::GroupId>,
+	{
+		fn build(&self) {
+			for ((domain_id, currency_id), group_id) in &self.currencies {
+				<Pallet<T, I> as CurrencyGroupChange>::attach_currency(
+					(*domain_id, *currency_id),
+					*group_id,
+				)
+				.unwrap();
+			}
+
+			for (account_id, (domain_id, currency_id), amount) in &self.stake_accounts {
+				<Pallet<T, I> as AccountRewards<T::AccountId>>::deposit_stake(
+					(*domain_id, *currency_id),
+					account_id,
+					*amount,
+				)
+				.unwrap();
+			}
+
+			for (group_id, amount) in &self.rewards {
+				<Pallet<T, I> as DistributedRewards>::distribute_reward(*amount, [*group_id])
+					.unwrap();
+			}
 		}
 	}
 }

@@ -13,7 +13,7 @@ mod rewards;
 
 use std::sync::Arc;
 
-use cfg_primitives::AuraId;
+use cfg_primitives::{AuraId, CFG};
 use frame_support::traits::GenesisBuild;
 use fudge::{primitives::ParaId, StandaloneBuilder};
 use fudge_core::{
@@ -26,7 +26,7 @@ use sc_executor::WasmExecutor;
 use sc_service::TFullClient;
 use sp_api::ProvideRuntimeApi as _;
 use sp_consensus_slots::SlotDuration;
-use sp_core::H256;
+use sp_core::{sr25519, H256};
 use sp_inherents::CreateInherentDataProviders;
 use sp_runtime::{generic::BlockId, BuildStorage, Storage};
 use tokio::runtime::Handle;
@@ -61,6 +61,8 @@ type Cidp = Box<
 #[allow(unused)]
 type Dp = Box<dyn DigestCreator<centrifuge::Block> + Send + Sync>;
 
+type ApiRef<'a> = sp_api::ApiRef<'a, <TFullClient<centrifuge::Block, centrifuge::RuntimeApi, TWasmExecutor> as sp_api::ProvideRuntimeApi<centrifuge::Block>>::Api>;
+
 fn create_builder(
 	handle: Handle,
 	genesis: Option<impl BuildStorage>,
@@ -68,7 +70,30 @@ fn create_builder(
 	let mut state = StateProvider::new(centrifuge::WASM_BINARY.expect("Wasm is build. Qed."));
 	state.insert_storage(
 		pallet_aura::GenesisConfig::<centrifuge::Runtime> {
-			authorities: vec![AuraId::from(sp_core::sr25519::Public([0u8; 32]))],
+			authorities: vec![AuraId::from(sr25519::Public([0u8; 32]))],
+		}
+		.build_storage()
+		.expect("ESSENTIAL: GenesisBuild must not fail at this stage."),
+	);
+
+	state.insert_storage(
+		pallet_rewards::GenesisConfig::<centrifuge::Runtime, pallet_rewards::Instance1> {
+			currencies: vec![(
+				(
+					development_runtime::RewardDomain::Block,
+					development_runtime::CurrencyId::Native,
+				),
+				1,
+			)],
+			stake_accounts: vec![(
+				get_account_id_from_seed::<sr25519::Public>("Alice"),
+				(
+					development_runtime::RewardDomain::Block,
+					development_runtime::CurrencyId::Native,
+				),
+				100 * CFG,
+			)],
+			rewards: vec![(1, 200 * CFG)],
 		}
 		.build_storage()
 		.expect("ESSENTIAL: GenesisBuild must not fail at this stage."),
@@ -161,7 +186,7 @@ impl ApiEnv {
 		let api = client.runtime_api();
 		let best_hash = BlockId::hash(self.builder.client().info().best_hash);
 
-		exec(api, best_hash);
+		self.builder.with_state(exec(api, best_hash)).unwrap();
 
 		self
 	}
@@ -175,5 +200,3 @@ impl ApiEnv {
 		self
 	}
 }
-
-type ApiRef<'a> = sp_api::ApiRef<'a, <TFullClient<centrifuge::Block, centrifuge::RuntimeApi, TWasmExecutor> as sp_api::ProvideRuntimeApi<centrifuge::Block>>::Api>;

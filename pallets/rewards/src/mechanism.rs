@@ -1,6 +1,9 @@
 use cfg_traits::ops::ensure::EnsureAddAssign;
 use frame_support::traits::tokens::Balance;
-use sp_runtime::{traits::Get, ArithmeticError};
+use sp_runtime::{
+	traits::{Get, MaybeSerializeDeserialize},
+	ArithmeticError,
+};
 
 pub mod base;
 pub mod deferred;
@@ -36,7 +39,7 @@ pub trait RewardMechanism {
 	type Group;
 	type Account;
 	type Currency;
-	type Balance: Balance;
+	type Balance: Balance + MaybeSerializeDeserialize;
 	type DistributionId: DistributionId;
 	type MaxCurrencyMovements: Get<u32>;
 

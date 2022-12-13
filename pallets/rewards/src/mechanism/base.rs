@@ -85,7 +85,7 @@ pub struct Mechanism<Balance, IBalance, Rate, MaxCurrencyMovements>(
 impl<Balance, IBalance, Rate, MaxCurrencyMovements> RewardMechanism
 	for Mechanism<Balance, IBalance, Rate, MaxCurrencyMovements>
 where
-	Balance: tokens::Balance + FixedPointOperand + TryFrom<IBalance>,
+	Balance: tokens::Balance + FixedPointOperand + TryFrom<IBalance> + MaybeSerializeDeserialize,
 	IBalance: FixedPointOperand
 		+ TryFrom<Balance>
 		+ EnsureAdd
