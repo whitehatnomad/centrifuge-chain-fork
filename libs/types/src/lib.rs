@@ -16,6 +16,7 @@
 
 ///! Common-types of the Centrifuge chain.
 pub mod adjustments;
+pub mod connectors_gateway;
 pub mod consts;
 pub mod domain_address;
 pub mod epoch;
@@ -34,4 +35,4 @@ pub mod xcm;
 
 /// The EVM Chain ID
 /// The type should accomodate all chain ids listed on https://chainlist.org/.
-type EVMChainId = u64;
+pub type EVMChainId = u64;

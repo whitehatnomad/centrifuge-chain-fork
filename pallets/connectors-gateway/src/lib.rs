@@ -14,7 +14,7 @@
 use core::fmt::Debug;
 
 use cfg_traits::connectors::{Codec, InboundQueue, OutboundQueue, Router as DomainRouter};
-use cfg_types::domain_address::{Domain, DomainAddress};
+use cfg_types::domain_address::DomainAddress;
 use codec::{EncodeLike, FullCodec};
 use frame_support::{dispatch::DispatchResult, pallet_prelude::*};
 use frame_system::pallet_prelude::OriginFor;
@@ -36,6 +36,8 @@ mod tests;
 
 #[frame_support::pallet]
 pub mod pallet {
+	use cfg_types::domain_address::Domain;
+
 	use super::*;
 
 	#[pallet::pallet]
@@ -58,7 +60,7 @@ pub mod pallet {
 		/// local context i.e. a different pallet.
 		type LocalOrigin: EnsureOrigin<
 			<Self as frame_system::Config>::RuntimeOrigin,
-			Success = DomainAddress,
+			Success = Self::ExternalAddress,
 		>;
 
 		/// The AdminOrigin ensures that some calls can only be performed by
@@ -70,6 +72,27 @@ pub mod pallet {
 		/// NOTE - this `Codec` trait is the Centrifuge trait for connectors
 		/// messages.
 		type Message: Codec;
+
+		/// The type that represents an address of a domain that's outside of
+		/// Centrifuge.
+		type ExternalAddress: Into<DomainAddress>
+			+ Clone
+			+ Debug
+			+ MaxEncodedLen
+			+ TypeInfo
+			+ FullCodec
+			+ EncodeLike
+			+ PartialEq;
+
+		/// The type that represents a domain that's outside of Centrifuge.
+		type ExternalDomain: From<Self::ExternalAddress>
+			+ Clone
+			+ Debug
+			+ MaxEncodedLen
+			+ TypeInfo
+			+ FullCodec
+			+ EncodeLike
+			+ PartialEq;
 
 		/// The message router type that is stored for each domain.
 		type Router: DomainRouter<Sender = Self::AccountId, Message = Self::Message>
@@ -95,22 +118,26 @@ pub mod pallet {
 	#[pallet::generate_deposit(pub (super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// The router for a given domain was set.
-		DomainRouterSet { domain: Domain, router: T::Router },
+		DomainRouterSet {
+			domain: T::ExternalDomain,
+			router: T::Router,
+		},
 
 		/// A connector was added to a domain.
-		ConnectorAdded { connector: DomainAddress },
+		ConnectorAdded { connector: T::ExternalAddress },
 
 		/// A connector was removed from a domain.
-		ConnectorRemoved { connector: DomainAddress },
+		ConnectorRemoved { connector: T::ExternalAddress },
 	}
 
 	/// Storage for domain routers.
 	///
 	/// This can only be set by an admin.
 	#[pallet::storage]
-	pub(crate) type DomainRouters<T: Config> = StorageMap<_, Blake2_128Concat, Domain, T::Router>;
+	pub(crate) type DomainRouters<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::ExternalDomain, T::Router>;
 
-	/// Storage that contains a limited number of whitelisted connectors for a
+	/// Storage that contains a number of whitelisted connectors for a
 	/// particular domain.
 	///
 	/// This can only be modified by an admin.
@@ -118,9 +145,9 @@ pub mod pallet {
 	pub(crate) type ConnectorsAllowlist<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
-		Domain,
+		T::ExternalDomain,
 		Blake2_128Concat,
-		DomainAddress,
+		T::ExternalAddress,
 		(),
 		ValueQuery,
 	>;
@@ -132,9 +159,6 @@ pub mod pallet {
 
 		/// The origin of the message to be processed is invalid.
 		InvalidMessageOrigin,
-
-		/// The domain is not supported.
-		DomainNotSupported,
 
 		/// Message decoding error.
 		MessageDecodingFailed,
@@ -162,12 +186,10 @@ pub mod pallet {
 		#[pallet::call_index(0)]
 		pub fn set_domain_router(
 			origin: OriginFor<T>,
-			domain: Domain,
+			domain: T::ExternalDomain,
 			router: T::Router,
 		) -> DispatchResult {
 			T::AdminOrigin::ensure_origin(origin)?;
-
-			ensure!(domain != Domain::Centrifuge, Error::<T>::DomainNotSupported);
 
 			router.init().map_err(|_| Error::<T>::RouterInitFailed)?;
 
@@ -181,20 +203,20 @@ pub mod pallet {
 		/// Add a connector for a specific domain.
 		#[pallet::weight(T::WeightInfo::add_connector())]
 		#[pallet::call_index(1)]
-		pub fn add_connector(origin: OriginFor<T>, connector: DomainAddress) -> DispatchResult {
+		pub fn add_connector(
+			origin: OriginFor<T>,
+			connector: T::ExternalAddress,
+		) -> DispatchResult {
 			T::AdminOrigin::ensure_origin(origin)?;
 
-			ensure!(
-				connector.domain() != Domain::Centrifuge,
-				Error::<T>::DomainNotSupported
-			);
+			let external_domain = T::ExternalDomain::from(connector.clone());
 
 			ensure!(
-				!ConnectorsAllowlist::<T>::contains_key(connector.domain(), connector.clone()),
+				!ConnectorsAllowlist::<T>::contains_key(external_domain.clone(), connector.clone()),
 				Error::<T>::ConnectorAlreadyAdded,
 			);
 
-			ConnectorsAllowlist::<T>::insert(connector.domain(), connector.clone(), ());
+			ConnectorsAllowlist::<T>::insert(external_domain, connector.clone(), ());
 
 			Self::deposit_event(Event::ConnectorAdded { connector });
 
@@ -204,15 +226,20 @@ pub mod pallet {
 		/// Remove a connector from a specific domain.
 		#[pallet::weight(T::WeightInfo::remove_connector())]
 		#[pallet::call_index(2)]
-		pub fn remove_connector(origin: OriginFor<T>, connector: DomainAddress) -> DispatchResult {
+		pub fn remove_connector(
+			origin: OriginFor<T>,
+			connector: T::ExternalAddress,
+		) -> DispatchResult {
 			T::AdminOrigin::ensure_origin(origin.clone())?;
 
+			let external_domain = T::ExternalDomain::from(connector.clone());
+
 			ensure!(
-				ConnectorsAllowlist::<T>::contains_key(connector.domain(), connector.clone()),
+				ConnectorsAllowlist::<T>::contains_key(external_domain.clone(), connector.clone(),),
 				Error::<T>::ConnectorNotFound,
 			);
 
-			ConnectorsAllowlist::<T>::remove(connector.domain(), connector.clone());
+			ConnectorsAllowlist::<T>::remove(external_domain, connector.clone());
 
 			Self::deposit_event(Event::ConnectorRemoved { connector });
 
@@ -226,32 +253,34 @@ pub mod pallet {
 			origin: OriginFor<T>,
 			msg: BoundedVec<u8, T::MaxIncomingMessageSize>,
 		) -> DispatchResult {
-			let domain_address = T::LocalOrigin::ensure_origin(origin)?;
+			let external_address = T::LocalOrigin::ensure_origin(origin)?;
+			let external_domain = T::ExternalDomain::from(external_address.clone());
 
-			match domain_address {
-				DomainAddress::EVM(_, _) => {
-					ensure!(
-						ConnectorsAllowlist::<T>::contains_key(
-							domain_address.domain(),
-							domain_address.clone()
-						),
-						Error::<T>::UnknownConnector,
-					);
+			let domain_address: DomainAddress = external_address.clone().into();
 
-					let incoming_msg = T::Message::deserialize(&mut msg.as_slice())
-						.map_err(|_| Error::<T>::MessageDecodingFailed)?;
+			// Extra check to ensure that our conversion between the external address and
+			// domain address is OK.
+			ensure!(
+				domain_address.domain() != Domain::Centrifuge,
+				Error::<T>::InvalidMessageOrigin
+			);
 
-					T::InboundQueue::submit(domain_address, incoming_msg)
-				}
-				DomainAddress::Centrifuge(_) => Err(Error::<T>::InvalidMessageOrigin.into()),
-			}
+			ensure!(
+				ConnectorsAllowlist::<T>::contains_key(external_domain, external_address),
+				Error::<T>::UnknownConnector,
+			);
+
+			let incoming_msg = T::Message::deserialize(&mut msg.as_slice())
+				.map_err(|_| Error::<T>::MessageDecodingFailed)?;
+
+			T::InboundQueue::submit(domain_address, incoming_msg)
 		}
 	}
 
 	/// This pallet will be the `OutboundQueue` used by other pallets to send
 	/// outgoing Connectors messages.
 	impl<T: Config> OutboundQueue for Pallet<T> {
-		type Destination = Domain;
+		type Destination = T::ExternalDomain;
 		type Message = T::Message;
 		type Sender = T::AccountId;
 
@@ -260,11 +289,6 @@ pub mod pallet {
 			destination: Self::Destination,
 			msg: Self::Message,
 		) -> DispatchResult {
-			ensure!(
-				destination != Domain::Centrifuge,
-				Error::<T>::DomainNotSupported
-			);
-
 			let router = DomainRouters::<T>::get(destination).ok_or(Error::<T>::RouterNotFound)?;
 
 			router.send(sender, msg)

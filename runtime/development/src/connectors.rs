@@ -11,7 +11,9 @@
 // GNU General Public License for more details.
 
 use cfg_primitives::{AccountId, Balance, PoolId, TrancheId};
-use cfg_types::{domain_address::Domain, fixed_point::Rate};
+use cfg_types::{
+	connectors_gateway::EVMAddress, domain_address::Domain, fixed_point::Rate, EVMChainId,
+};
 use frame_support::parameter_types;
 use frame_system::EnsureRoot;
 use runtime_common::routers::DummyRouter;
@@ -28,6 +30,8 @@ parameter_types! {
 
 impl pallet_connectors_gateway::Config for Runtime {
 	type AdminOrigin = EnsureRoot<AccountId>;
+	type ExternalAddress = EVMAddress;
+	type ExternalDomain = EVMChainId;
 	type InboundQueue = Connectors;
 	type LocalOrigin = pallet_connectors_gateway::EnsureLocal;
 	type MaxIncomingMessageSize = MaxIncomingMessageSize;

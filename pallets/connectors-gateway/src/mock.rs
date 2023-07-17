@@ -1,5 +1,5 @@
 use cfg_mocks::{pallet_mock_connectors, pallet_mock_routers, MessageMock, RouterMock};
-use cfg_types::domain_address::DomainAddress;
+use cfg_types::{connectors_gateway::EVMAddress, domain_address::DomainAddress, EVMChainId};
 use frame_system::EnsureRoot;
 use sp_core::{crypto::AccountId32, ConstU16, ConstU32, ConstU64, H256};
 use sp_runtime::{
@@ -80,6 +80,8 @@ impl pallet_mock_routers::Config for Runtime {}
 
 impl pallet_connectors_gateway::Config for Runtime {
 	type AdminOrigin = EnsureRoot<AccountId32>;
+	type ExternalAddress = EVMAddress;
+	type ExternalDomain = EVMChainId;
 	type InboundQueue = MockConnectors;
 	type LocalOrigin = EnsureLocal;
 	type MaxIncomingMessageSize = MaxIncomingMessageSize;

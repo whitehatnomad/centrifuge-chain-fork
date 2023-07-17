@@ -10,7 +10,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 
-use cfg_types::domain_address::DomainAddress;
+use cfg_types::connectors_gateway::EVMAddress;
 use codec::{Decode, Encode, MaxEncodedLen};
 use frame_support::traits::EnsureOrigin;
 use scale_info::TypeInfo;
@@ -20,25 +20,25 @@ use sp_runtime::RuntimeDebug;
 
 #[derive(Clone, Eq, PartialEq, RuntimeDebug, Encode, Decode, MaxEncodedLen, TypeInfo)]
 pub enum GatewayOrigin {
-	Local(DomainAddress),
+	Local(EVMAddress),
 }
 
 pub struct EnsureLocal;
 
 impl<O: Into<Result<GatewayOrigin, O>> + From<GatewayOrigin>> EnsureOrigin<O> for EnsureLocal {
-	type Success = DomainAddress;
+	type Success = EVMAddress;
 
 	fn try_origin(o: O) -> Result<Self::Success, O> {
 		o.into().map(|o| match o {
-			GatewayOrigin::Local(domain_address) => domain_address,
+			GatewayOrigin::Local(evm_address) => evm_address,
 		})
 	}
 
 	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin() -> Result<O, ()> {
-		Ok(O::from(GatewayOrigin::Local(DomainAddress::EVM(
-			1,
-			H160::from_low_u64_be(1).into(),
-		))))
+		Ok(O::from(GatewayOrigin::Local(EVMAddress {
+			chain_id: 1,
+			address: H160::from_low_u64_be(1).into(),
+		})))
 	}
 }
