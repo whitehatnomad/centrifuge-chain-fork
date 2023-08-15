@@ -52,7 +52,7 @@ pub mod pallet {
 		}
 
 		pub fn mock_feed_value(
-			f: impl Fn(T::AccountId, T::DataId, T::DataElem) -> DispatchResult + 'static,
+			f: impl Fn(Option<T::AccountId>, T::DataId, T::DataElem) -> DispatchResult + 'static,
 		) {
 			register_call!(move |(a, b, c)| f(a, b, c));
 		}
@@ -88,7 +88,7 @@ pub mod pallet {
 	}
 
 	impl<T: Config> DataFeeder<T::DataId, T::DataElem, T::AccountId> for Pallet<T> {
-		fn feed_value(a: T::AccountId, b: T::DataId, c: T::DataElem) -> DispatchResult {
+		fn feed_value(a: Option<T::AccountId>, b: T::DataId, c: T::DataElem) -> DispatchResult {
 			execute_call!((a, b, c))
 		}
 	}
