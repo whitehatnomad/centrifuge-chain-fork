@@ -12,7 +12,7 @@
 
 use codec::MaxEncodedLen;
 use frame_support::sp_runtime::traits::Convert;
-use sp_arithmetic::traits::Unsigned;
+use sp_arithmetic::{traits::Unsigned, MultiplyRational};
 use sp_runtime::{
 	traits::{EnsureFixedPointNumber, EnsureSub},
 	ArithmeticError,
@@ -240,7 +240,8 @@ where
 	where
 		Weight: Copy + From<u128>,
 		BalanceRatio: Copy + FixedPointNumber,
-		Balance: Copy + BaseArithmetic + FixedPointOperand + Unsigned + From<u64>,
+		Balance:
+			Copy + BaseArithmetic + FixedPointOperand + Unsigned + From<u64> + MultiplyRational,
 		MaxExecutionTranches: Get<u32>,
 	{
 		let risk_buffer_improvement_scores =
@@ -444,7 +445,7 @@ pub fn calculate_solution_parameters<Balance, BalanceRatio, Rate, Weight, Curren
 ) -> Result<(Balance, Balance, Vec<Perquintill>), DispatchError>
 where
 	BalanceRatio: Copy + FixedPointNumber,
-	Balance: Copy + BaseArithmetic + FixedPointOperand + Unsigned + From<u64>,
+	Balance: Copy + BaseArithmetic + FixedPointOperand + Unsigned + From<u64> + MultiplyRational,
 	Weight: Copy + From<u128>,
 	MaxTranches: Get<u32>,
 {

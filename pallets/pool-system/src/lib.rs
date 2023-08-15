@@ -12,7 +12,6 @@
 // GNU General Public License for more details.
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::or_fun_call)]
-#![feature(thread_local)]
 
 use cfg_primitives::Moment;
 use cfg_traits::{Permissions, PoolInspect, PoolMutate, PoolNAV, PoolReserve};
@@ -25,7 +24,8 @@ use frame_support::{
 	dispatch::DispatchResult,
 	ensure,
 	traits::{
-		fungibles::{Inspect, Mutate, Transfer},
+		fungibles::{Inspect, Mutate},
+		tokens::Preservation,
 		ReservableCurrency, UnixTime,
 	},
 	transactional, BoundedVec, RuntimeDebug,
@@ -45,7 +45,7 @@ use scale_info::TypeInfo;
 #[cfg(feature = "std")]
 use serde::{Deserialize, Serialize};
 pub use solution::*;
-use sp_arithmetic::traits::BaseArithmetic;
+use sp_arithmetic::{traits::BaseArithmetic, MultiplyRational};
 use sp_runtime::{
 	traits::{
 		AccountIdConversion, AtLeast32BitUnsigned, CheckedAdd, CheckedSub, EnsureAdd,
@@ -201,6 +201,7 @@ pub mod pallet {
 			+ Default
 			+ Copy
 			+ MaxEncodedLen
+			+ MultiplyRational
 			+ FixedPointOperand
 			+ From<u64>
 			+ From<u128>
@@ -277,8 +278,7 @@ pub mod pallet {
 		type Currency: ReservableCurrency<Self::AccountId, Balance = Self::Balance>;
 
 		type Tokens: Mutate<Self::AccountId>
-			+ Inspect<Self::AccountId, AssetId = Self::CurrencyId, Balance = Self::Balance>
-			+ Transfer<Self::AccountId>;
+			+ Inspect<Self::AccountId, AssetId = Self::CurrencyId, Balance = Self::Balance>;
 
 		type Permission: Permissions<
 			Self::AccountId,
@@ -1220,7 +1220,13 @@ pub mod pallet {
 				// TODO: Add a debug log here and/or a debut_assert maybe even an error if
 				// remaining_amount != 0 at this point!
 
-				T::Tokens::transfer(pool.currency, &who, &pool_account, amount, false)?;
+				T::Tokens::transfer(
+					pool.currency,
+					&who,
+					&pool_account,
+					amount,
+					Preservation::Expendable,
+				)?;
 				Self::deposit_event(Event::Rebalanced { pool_id });
 				Ok(())
 			})
@@ -1240,12 +1246,12 @@ pub mod pallet {
 					.reserve
 					.total
 					.checked_sub(&amount)
-					.ok_or(TokenError::NoFunds)?;
+					.ok_or(TokenError::FundsUnavailable)?;
 				pool.reserve.available = pool
 					.reserve
 					.available
 					.checked_sub(&amount)
-					.ok_or(TokenError::NoFunds)?;
+					.ok_or(TokenError::FundsUnavailable)?;
 
 				let mut remaining_amount = amount;
 				for tranche in pool.tranches.non_residual_top_slice_mut() {
@@ -1269,7 +1275,13 @@ pub mod pallet {
 					remaining_amount -= tranche_amount;
 				}
 
-				T::Tokens::transfer(pool.currency, &pool_account, &who, amount, false)?;
+				T::Tokens::transfer(
+					pool.currency,
+					&pool_account,
+					&who,
+					amount,
+					Preservation::Expendable,
+				)?;
 				Self::deposit_event(Event::Rebalanced { pool_id });
 				Ok(())
 			})

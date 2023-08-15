@@ -15,7 +15,10 @@ use cfg_traits::{
 	TrancheCurrency, TrancheTokenPrice, UpdateState,
 };
 use cfg_types::{epoch::EpochState, investments::InvestmentInfo};
-use frame_support::traits::Contains;
+use frame_support::traits::{
+	tokens::{Fortitude, Precision},
+	Contains,
+};
 use sp_runtime::traits::Hash;
 
 use super::*;
@@ -362,7 +365,7 @@ impl<T: Config> InvestmentAccountant<T::AccountId> for Pallet<T> {
 	) -> Result<(), Self::Error> {
 		let _details = Pool::<T>::get(id.of_pool()).ok_or(Error::<T>::NoSuchPool)?;
 
-		T::Tokens::transfer(id.into(), source, dest, amount, false).map(|_| ())
+		T::Tokens::transfer(id.into(), source, dest, amount, Preservation::Expendable).map(|_| ())
 	}
 
 	fn deposit(
@@ -372,7 +375,7 @@ impl<T: Config> InvestmentAccountant<T::AccountId> for Pallet<T> {
 	) -> Result<(), Self::Error> {
 		let _details = Pool::<T>::get(id.of_pool()).ok_or(Error::<T>::NoSuchPool)?;
 
-		T::Tokens::mint_into(id.into(), buyer, amount)
+		T::Tokens::mint_into(id.into(), buyer, amount).map(|_| ())
 	}
 
 	fn withdraw(
@@ -382,7 +385,14 @@ impl<T: Config> InvestmentAccountant<T::AccountId> for Pallet<T> {
 	) -> Result<(), Self::Error> {
 		let _details = Pool::<T>::get(id.of_pool()).ok_or(Error::<T>::NoSuchPool)?;
 
-		T::Tokens::burn_from(id.into(), seller, amount).map(|_| ())
+		T::Tokens::burn_from(
+			id.into(),
+			seller,
+			amount,
+			Precision::Exact,
+			Fortitude::Force,
+		)
+		.map(|_| ())
 	}
 }
 

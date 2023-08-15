@@ -20,7 +20,10 @@ use frame_support::{
 };
 use orml_traits::{asset_registry::AssetMetadata, Change};
 use scale_info::TypeInfo;
-use sp_arithmetic::traits::{BaseArithmetic, Unsigned};
+use sp_arithmetic::{
+	traits::{BaseArithmetic, Unsigned},
+	MultiplyRational,
+};
 use sp_runtime::{
 	traits::{AtLeast32BitUnsigned, One, Zero},
 	FixedPointNumber, FixedPointOperand, TypeId,
@@ -246,7 +249,7 @@ impl<
 		PoolId,
 		MaxTranches,
 	> where
-	Balance: FixedPointOperand + BaseArithmetic + Unsigned + From<u64>,
+	Balance: FixedPointOperand + BaseArithmetic + Unsigned + From<u64> + MultiplyRational,
 	CurrencyId: Copy,
 	EpochId: BaseArithmetic + Copy,
 	PoolId: Copy + Encode,
