@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["CurrencyId","The old definition of `CurrencyId` which included `AUSD` and `KSM` as hardcoded variants."]]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["DataProviderBridge","A provider that maps an `TimestampedQuantity` into a tuple `(Balance, Moment)`."],["LastOracleValue","Always choose the last updated value in case of several values."],["OnNewPrice","Trigger the new data event as a `Balance` type."]]};

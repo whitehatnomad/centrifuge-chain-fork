@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["BlockGasLimit",""],["DefaultBaseFeePerGas",""],["DefaultElasticity",""],["FindAuthorTruncated","To create valid Ethereum-compatible blocks, we need a 20-byte “author” for the block. Since that author is purely informational, we do a simple truncation of the 32-byte Substrate author"],["PrecompilesValue",""],["WeightPerGas",""]]};

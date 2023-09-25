@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["ValuationMethod","Defines the valuation method of a loan"]],"struct":[["DiscountedCashFlow","Discounted cash flow values"]]};

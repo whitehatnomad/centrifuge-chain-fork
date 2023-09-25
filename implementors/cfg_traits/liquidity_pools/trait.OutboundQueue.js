@@ -1,0 +1,4 @@
+(function() {var implementors = {
+"centrifuge_runtime":[["impl <a class=\"trait\" href=\"cfg_traits/liquidity_pools/trait.OutboundQueue.html\" title=\"trait cfg_traits::liquidity_pools::OutboundQueue\">OutboundQueue</a> for <a class=\"struct\" href=\"centrifuge_runtime/struct.FilteredOutboundQueue.html\" title=\"struct centrifuge_runtime::FilteredOutboundQueue\">FilteredOutboundQueue</a>"]],
+"pallet_liquidity_pools_gateway":[["impl&lt;T: <a class=\"trait\" href=\"pallet_liquidity_pools_gateway/pallet/trait.Config.html\" title=\"trait pallet_liquidity_pools_gateway::pallet::Config\">Config</a>&gt; OutboundQueue for <a class=\"struct\" href=\"pallet_liquidity_pools_gateway/pallet/struct.Pallet.html\" title=\"struct pallet_liquidity_pools_gateway::pallet::Pallet\">Pallet</a>&lt;T&gt;"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

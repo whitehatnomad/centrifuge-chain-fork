@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["SubstrateWeight","Weights for pallet_transfer_allowlist using the Substrate node and recommended hardware."]],"trait":[["WeightInfo",""]]};

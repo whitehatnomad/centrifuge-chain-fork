@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":[["DEFAULT_COLLATOR_STAKE","The default amount of stake for CurrencyId::Staking(StakingCurrency::BlockRewards) which is inherently assigned to any member of the only group in block rewards."]]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["AxelarEVMRouter","The router used for executing the LiquidityPools contract via Axelar."]]};

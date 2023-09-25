@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":[["pallet","The module that hosts all the FRAME types needed to add this pallet to a runtime."]],"struct":[["Account","Type that contains the stake properties of an account"],["Currency","Type that contains the stake properties of stake class"],["Group","Type that contains the stake properties of a stake group"],["Mechanism",""]]};

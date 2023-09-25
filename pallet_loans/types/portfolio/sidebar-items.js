@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["PortfolioValuationUpdateType","Information about how the portfolio valuation was updated"]],"struct":[["InitialPortfolioValuation","Type that builds a PortfolioValuation with the current instant."],["PortfolioValuation",""]]};

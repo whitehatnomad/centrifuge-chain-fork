@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["GeneralCurrencyPrefix","The hashed prefix for currencies managed by LiquidityPools."]]};

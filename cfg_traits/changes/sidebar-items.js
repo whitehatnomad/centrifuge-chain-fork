@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"trait":[["ChangeGuard","Trait for get feedback before apply certain changes. It can be used when you need to ask to a third party or external module if applying a change that has some effect into the system is something healthy."]]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["NoLoanChanges","Type used to configure the pallet without changes support"],["NoPriceCollection",""],["NoPriceRegistry","Type used to configure the pallet without a price registry"]]};

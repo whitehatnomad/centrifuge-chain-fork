@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["EthereumXCMRouter","The router used for submitting a message via Moonbeam XCM."]]};

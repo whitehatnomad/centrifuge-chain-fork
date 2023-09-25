@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["MintReward","Enables rewarding out of thin air, e.g. via minting."],["TransferReward","Enables rewarding from an account address, e.g. the Treasury."]]};

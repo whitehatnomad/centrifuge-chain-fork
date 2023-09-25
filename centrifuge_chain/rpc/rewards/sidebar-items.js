@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"static":[["CALLSITE",""],["META",""]],"struct":[["ParamsObject",""],["Rewards",""]],"trait":[["RewardsApiClient","Client implementation for the `RewardsApi` RPC API."],["RewardsApiServer","Server trait implementation for the `RewardsApi` RPC API."]]};

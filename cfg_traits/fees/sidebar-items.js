@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Fee","A way to identify a fee value."]],"trait":[["FeeKey","Type used for identity the key used to retrieve the fees."],["Fees","A trait that used to deal with fees"]]};

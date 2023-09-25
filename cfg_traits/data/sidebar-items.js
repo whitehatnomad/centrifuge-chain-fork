@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"trait":[["DataCollection","Abstration to represent a collection of data in memory"],["DataRegistry","Abstraction that represents a storage where you can subscribe to data updates and collect them"]]};

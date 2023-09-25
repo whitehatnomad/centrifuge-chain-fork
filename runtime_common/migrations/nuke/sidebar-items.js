@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["contains_prefixed_key_skip_storage_version",""]],"struct":[["Migration","This upgrade nukes all storages from the pallet individually. This upgrade is only executed if pallet version has changed."]]};

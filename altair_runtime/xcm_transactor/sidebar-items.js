@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["NullTransactor","NOTE: our usage of XcmTransactor does NOT use this type so we have it implement the required traits by returning safe dummy values."]]};

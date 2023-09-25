@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["CollectedForeignInvestmentHook","The hook struct which acts upon a finalized investment collection."],["CollectedForeignRedemptionHook","The hook struct which acts upon a finalized redemption collection."],["DecreasedForeignInvestOrderHook","The hook struct which acts upon a finalized investment decrement."]]};

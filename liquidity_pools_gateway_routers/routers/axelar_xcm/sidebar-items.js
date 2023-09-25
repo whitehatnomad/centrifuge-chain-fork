@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["AxelarXCMRouter","The router used for submitting a message using Axelar via Moonbeam XCM."]],"type":[["AxelarXcmDomain",""]]};

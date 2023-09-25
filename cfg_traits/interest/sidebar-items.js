@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["CompoundingSchedule",""],["InterestRate","Interest rate method with compounding schedule information"]],"trait":[["InterestAccrual","A trait that can be used to calculate interest accrual for debt"],["RateCollection","A collection of pre-computed interest rates for performing interest accrual"]]};

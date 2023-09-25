@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["MaxBorrowAmount","Define the max borrow amount of a loan"]],"struct":[["ExternalActivePricing","External pricing method with extra attributes for active loans"],["ExternalAmount",""],["ExternalPricing","External pricing method"]]};

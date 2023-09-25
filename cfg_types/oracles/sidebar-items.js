@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["OracleKey","A representation of an oracle price identifier"]],"type":[["Isin","ISIN format."]]};

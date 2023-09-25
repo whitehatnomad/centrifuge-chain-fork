@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"trait":[["EthereumTransactor","Something capable of managing transactions in an EVM/Ethereum context"]]};

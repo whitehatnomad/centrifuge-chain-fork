@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["convert_balance_decimals","Converts a `uint` `Balance` of one precision into a `Balance` of another precision i.e:"],["fixed_point_to_balance","Transform a fixed point number to a Balance. The resulting Balance will be represented with the `decimals` given."]]};

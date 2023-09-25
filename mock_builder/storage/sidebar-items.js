@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Error",""]],"fn":[["execute_call","Execute a call from the call storage identified by a `call_id`."],["register_call","Register a call into the call storage. The registered call can be uniquely identified by the returned `CallId`."]],"type":[["CallId","Identify a call in the call storage"]]};

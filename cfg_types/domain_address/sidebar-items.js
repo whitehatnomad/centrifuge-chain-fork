@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Domain","A Domain is a chain or network we can send a message to. The domain indices need to match those used in the EVM contracts and these need to pass the Centrifuge domain to send tranche tokens from the other domain here. Therefore, DO NOT remove or move variants around."],["DomainAddress",""]],"struct":[["DomainLocator",""]]};

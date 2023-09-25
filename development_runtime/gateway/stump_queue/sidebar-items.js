@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["StumpInboundQueue","A stump inbound queue that does not yet hit the LP logic (before FI we do not want that) but stores an Event."]]};
